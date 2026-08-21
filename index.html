@@ -908,12 +908,11 @@ footer{background:var(--burg);padding:80px 52px;text-align:center;}
     <div class="work-track rise d2" id="wTrack">
       <a class="wcard" href="https://www.instagram.com/reel/DYSDsY-NyE5/" target="_blank" rel="noopener">
         <div class="wframe"><div class="winner">
-          <video data-src="https://findshai.github.io/video-hosting/Courtyard.Playhouse.mp41" poster="https://github.com/findshai/trialportfolio/releases/download/v1.0.0/Free.Theatre.Photo.png" 
-            autoplay 
+          <video data-src="https://findshai.github.io/video-hosting/Courtyard.Playhouse.mp4#t=0.1"
+            preload="metadata" 
             muted 
             loop 
-            playsinline 
-            preload="metadata">
+            playsinline>
           </video>
           <span class="wbadge wb-live">▶ 391K IG</span>
           <span class="wtype">DISCOVERY</span>
@@ -1500,6 +1499,33 @@ document.querySelectorAll('.svc-card').forEach(card=>{
     card.style.transform = '';
   });
 });
+</script>
+      <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const videos = document.querySelectorAll('.portfolio-video');
+
+    // 1. Force every video to display its first frame immediately
+    videos.forEach(video => {
+      video.addEventListener('loadedmetadata', () => {
+        video.currentTime = 0.1;
+      }, { once: true });
+    });
+
+    // 2. Preload & Play 300px BEFORE the video scrolls into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          video.preload = "auto";
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { rootMargin: "300px 0px" }); // Starts downloading 300px early for instant streaming
+
+    videos.forEach(video => observer.observe(video));
+  });
 </script>
 </body>
 </html>
